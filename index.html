@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BusIF · Reserva de transporte · IF Goiano – Campus Hidrolândia</title>
+<style>
+:root{--g:#2f9e41;--r:#cd191e;--bg:#f2f6f2;--card:#fff;--tx:#16231a;--mu:#5a6b5e;--bd:#d6e2d7;--btn:#237a32;--on:#fff;--ok:#e3f3e6;--bad:#fde8e8;--h1:#0f4a22;--h2:#1b6b2e;--in:#fbfdfb}
+:root[data-theme=dark]{--g:#4cc364;--r:#ff6065;--bg:#0d140f;--card:#16201a;--tx:#e7f1e9;--mu:#9bb0a0;--bd:#283a2d;--btn:#4cc364;--on:#07130a;--ok:#173020;--bad:#3b1c1e;--h1:#12331a;--h2:#1c5a2a;--in:#101a13}
+*{box-sizing:border-box}
+body{margin:0;font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--tx)}
+header{background:linear-gradient(120deg,var(--h1),var(--h2));color:#fff;border-bottom:4px solid var(--r);padding:.7rem 1rem;display:flex;align-items:center;gap:.8rem;flex-wrap:wrap}
+.logo{display:flex;gap:3px}.logo i{width:12px;height:30px;background:#fff;border-radius:2px}.logo i:last-child{background:var(--r);height:18px;align-self:flex-end}
+.brand{flex:1;min-width:190px;line-height:1.15}.brand b{font-size:1.1rem}.brand small{display:block;color:#fff;font-weight:600}
+header .who{font-size:.85rem;text-align:right}
+button,input,select,textarea{font:inherit;color:inherit}
+.btn,.ghost,.ic{border:0;border-radius:8px;cursor:pointer;padding:.55rem .95rem;font-weight:600}
+.btn{background:var(--btn);color:var(--on)}.btn.red{background:var(--r);color:#fff}
+.ghost{background:transparent;border:1px solid var(--bd);color:var(--tx)}
+header .ghost{border-color:rgba(255,255,255,.55);color:#fff;padding:.35rem .7rem;font-weight:500}
+.ic{background:var(--ok);padding:.3rem .8rem;font-size:1.2rem}
+:focus-visible{outline:3px solid var(--r);outline-offset:2px}
+.tabs{display:flex;gap:.25rem;padding:.6rem 1rem 0;max-width:980px;margin:auto;overflow-x:auto}
+.tabs button{background:none;border:0;border-bottom:3px solid transparent;padding:.6rem .9rem;cursor:pointer;color:var(--mu);font-weight:600;white-space:nowrap}
+.tabs button.on{color:var(--btn);border-color:var(--r)}
+main{max-width:980px;margin:auto;padding:1rem}
+.grid{display:grid;gap:1rem}@media(min-width:780px){.grid{grid-template-columns:1fr 1fr}}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:1.1rem}
+h1,h2,h3{margin:.1rem 0 .7rem;line-height:1.2}h2{font-size:1.15rem}h3{font-size:1rem;color:var(--mu)}
+label{display:block;font-weight:600;font-size:.9rem;margin:.7rem 0 .25rem}
+input,select,textarea{width:100%;padding:.6rem .7rem;border:1px solid var(--bd);border-radius:8px;background:var(--in)}
+textarea{min-height:90px;resize:vertical}
+.row{display:flex;gap:.6rem;flex-wrap:wrap;align-items:end}.row>*{flex:1;min-width:130px}.row>.btn{flex:0}
+small,.mu{color:var(--mu)}.cnt{text-align:right;font-size:.8rem}
+.calh{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}.cal i{font-style:normal;font-size:.78rem;color:var(--mu);padding:.2rem}
+.day{aspect-ratio:1;border:1px solid var(--bd);background:var(--in);border-radius:8px;cursor:pointer;font-weight:600;min-height:38px}
+.day:hover:not(:disabled){border-color:var(--g)}.day.sel{background:var(--btn);color:var(--on);border-color:var(--btn)}
+.day:disabled{opacity:.3;cursor:not-allowed;background:transparent;text-decoration:line-through}
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(105px,1fr));gap:.5rem}
+.slot{border:1px solid var(--bd);background:var(--in);border-radius:10px;padding:.55rem;cursor:pointer;text-align:left}
+.slot b{font-size:1.1rem;display:block}.slot small{font-size:.75rem}
+.slot.sel{border:2px solid var(--btn);background:var(--ok)}
+.note{background:var(--ok);border-left:4px solid var(--g);padding:.6rem .8rem;border-radius:6px;font-size:.9rem;margin:.7rem 0}
+.note.red{background:var(--bad);border-color:var(--r)}
+.lst{list-style:none;margin:0;padding:0}.lst li{border-top:1px solid var(--bd);padding:.7rem 0;display:flex;gap:.6rem;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.badge{font-size:.75rem;font-weight:700;padding:.15rem .55rem;border-radius:20px;background:var(--ok);color:var(--btn)}.badge.x{background:var(--bad);color:var(--r)}
+.sum{display:flex;gap:1.2rem;flex-wrap:wrap;margin-top:.8rem}.sum b{font-size:1.5rem;display:block;color:var(--btn)}
+.hd{display:flex;justify-content:space-between;background:var(--ok);margin:.9rem -1.1rem .2rem;padding:.4rem 1.1rem;font-weight:700;flex-wrap:wrap}
+.env{display:flex;gap:.4rem;align-items:center}.env input{width:70px}
+.cancel{text-decoration:line-through;opacity:.6}
+.seg{display:flex;margin-bottom:.5rem}.seg button{flex:1;padding:.6rem;border:1px solid var(--bd);background:var(--in);cursor:pointer;font-weight:600}.seg .on{background:var(--btn);color:var(--on)}
+.login{max-width:420px;margin:2rem auto}
+#toast{position:fixed;left:50%;bottom:1.2rem;transform:translateX(-50%);background:var(--btn);color:var(--on);padding:.7rem 1.1rem;border-radius:10px;font-weight:600;display:none;z-index:9;max-width:90vw}#toast.bad{background:var(--r);color:#fff}
+@media print{header,.tabs,.no-print,#toast{display:none!important}body{background:#fff;color:#000}.card{border:0}}
+</style>
+</head>
+<body>
+<div id="app"></div><div id="toast" role="status"></div>
+<script>
+/* ================= BANCO DE DADOS =================
+   SCHEMA_SQL é o esquema (PostgreSQL) para a versão com servidor.
+   Neste arquivo, as mesmas tabelas são simuladas no localStorage (DB). */
+const SCHEMA_SQL=`
+CREATE TYPE papel_usuario AS ENUM ('aluno','professor','inspetor','prefeitura','admin');
+CREATE TABLE usuarios(
+  id SERIAL PRIMARY KEY, nome VARCHAR(120) NOT NULL, papel papel_usuario NOT NULL,
+  matricula VARCHAR(14) UNIQUE, cpf CHAR(11) UNIQUE, senha_hash TEXT,
+  criado_em TIMESTAMPTZ NOT NULL DEFAULT now(),
+  CHECK (matricula IS NOT NULL OR (cpf IS NOT NULL AND senha_hash IS NOT NULL)));
+CREATE TABLE reservas(
+  id SERIAL PRIMARY KEY, usuario_id INT NOT NULL REFERENCES usuarios(id),
+  data DATE NOT NULL, horario TIME NOT NULL, categoria VARCHAR(40) NOT NULL,
+  motivo VARCHAR(300) NOT NULL CHECK (char_length(motivo)>=10),
+  qtd_pessoas INT NOT NULL CHECK (qtd_pessoas BETWEEN 1 AND 200),
+  veiculos_sugeridos INT NOT NULL CHECK (veiculos_sugeridos BETWEEN 1 AND 20),
+  veiculos_enviados INT CHECK (veiculos_enviados >= 0),
+  status VARCHAR(10) NOT NULL DEFAULT 'ativa' CHECK (status IN ('ativa','cancelada')),
+  criada_em TIMESTAMPTZ NOT NULL DEFAULT now(), cancelada_em TIMESTAMPTZ,
+  cancelada_apos_prazo BOOLEAN NOT NULL DEFAULT false,
+  CHECK (EXTRACT(ISODOW FROM data) <= 5), CHECK (horario BETWEEN '14:30' AND '17:30'));
+-- Sem UNIQUE(data, horario): várias reservas por horário são permitidas.
+CREATE INDEX idx_reservas_data_horario ON reservas(data, horario);
+CREATE TABLE dias_bloqueados(data DATE PRIMARY KEY, descricao VARCHAR(100) NOT NULL);
+CREATE TABLE configuracao(chave VARCHAR(40) PRIMARY KEY, valor TEXT NOT NULL);`;
+
+const mem={};
+const ls={get(k){try{return localStorage.getItem(k)}catch(e){return mem[k]??null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){mem[k]=v}}};
+const DB={
+  t(n){try{return JSON.parse(ls.get('ifh_'+n)||'[]')}catch(e){return []}},
+  save(n,r){ls.set('ifh_'+n,JSON.stringify(r))},
+  insert(n,o){const r=this.t(n);o.id=r.reduce((m,x)=>Math.max(m,x.id||0),0)+1;r.push(o);this.save(n,r);return o},
+  update(n,id,p){const r=this.t(n);Object.assign(r.find(x=>x.id==id),p);this.save(n,r)}
+};
+let CFG={};
+const DEMO=true; /* Em produção, use false: esconde a dica das contas de demonstração (e remova-as pelo painel). */
+/* Login pelo SUAP (OAuth2, Authorization Code + PKCE, sem client_secret no navegador).
+   1) Peça à TI do campus para cadastrar a aplicação no SUAP: Authorization grant type = Authorization code,
+      Redirect URI = o valor de SUAP.redirect (endereço exato onde este arquivo ficará hospedado, https).
+   2) Cole o client_id em SUAP.clientId. Enquanto estiver vazio, o site usa a simulação de demonstração. */
+const SUAP={url:'https://suap.ifgoiano.edu.br',clientId:'',scope:'identificacao email',redirect:location.origin+location.pathname,tokenUrl:'',apiUrl:''};
+SUAP.tokenUrl=SUAP.tokenUrl||SUAP.url+'/o/token/';SUAP.apiUrl=SUAP.apiUrl||SUAP.url+'/api/v2/minhas-informacoes/meus-dados/';
+async function hash(s){ /* Em produção: bcrypt/Argon2 no servidor. */
+  try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('ifh:'+s));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+  catch(e){let h=5381;for(const c of 'ifh:'+s)h=(h*33)^c.charCodeAt(0);return'w'+(h>>>0).toString(16)}}
+async function seed(){
+  if(!DB.t('configuracao').length)DB.save('configuracao',Object.entries({horario_limite:'13:00',horarios:'14:30,15:00,15:30,16:00,16:30,17:00,17:30',capacidade_veiculo:'45',max_pessoas:'200',dias_max:'30'}).map(([chave,valor])=>({chave,valor})));
+  if(!DB.t('dias_bloqueados').length)DB.save('dias_bloqueados',[{data:'2026-11-20',descricao:'Dia da Consciência Negra'},{data:'2026-12-25',descricao:'Natal'}]);
+  if(!DB.t('usuarios').length){const now=new Date().toISOString();
+    for(const [nome,papel,cpf,s] of [['Administrador do Campus','admin','11144477735','admin123'],['Transporte – Prefeitura','prefeitura','52998224725','prefeitura123'],['Inspetor Demonstração','inspetor','12345678909','inspetor123']])
+      DB.insert('usuarios',{nome,papel,matricula:null,cpf,senha_hash:await hash(s),criado_em:now})}
+  CFG=Object.fromEntries(DB.t('configuracao').map(r=>[r.chave,r.valor]));CFG.horarios=CFG.horarios.split(',');
+}
+
+/* ================= UTILITÁRIOS ================= */
+const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const br=d=>d.split('-').reverse().join('/'),pad=n=>String(n).padStart(2,'0');
+const iso=x=>`${x.getFullYear()}-${pad(x.getMonth()+1)}-${pad(x.getDate())}`;
+const addDias=(d,n)=>{const x=new Date(d+'T12:00');x.setDate(x.getDate()+n);return iso(x)};
+const MESES=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+const PAPEL={aluno:'Aluno',professor:'Professor',inspetor:'Inspetor',prefeitura:'Prefeitura',admin:'Administrador'};
+const CATS=['Consulta médica','Documentos ou órgãos públicos','Compras ou material escolar','Atividade pedagógica','Outro'];
+function toast(m,bad){const t=$('#toast');t.textContent=m;t.className=bad?'bad':'';t.style.display='block';clearTimeout(toast.i);toast.i=setTimeout(()=>t.style.display='none',3800)}
+function cpfOk(c){c=c.replace(/\D/g,'');if(c.length!=11||/^(\d)\1+$/.test(c))return false;for(let t=9;t<11;t++){let s=0;for(let i=0;i<t;i++)s+=c[i]*(t+1-i);if((s*10%11)%10!=c[t])return false}return true}
+const mascara=el=>{let v=el.value.replace(/\D/g,'').slice(0,11);el.value=v.replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2')};
+const mask=cpf=>`•••.${cpf.slice(3,6)}.•••-••`;
+
+/* Horário de Brasília (no servidor, usar America/Sao_Paulo) */
+function agora(){const p=Object.fromEntries(new Intl.DateTimeFormat('en-CA',{timeZone:'America/Sao_Paulo',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date()).map(x=>[x.type,x.value]));return{d:`${p.year}-${p.month}-${p.day}`,m:+p.hour*60+ +p.minute}}
+const minutos=h=>+h.slice(0,2)*60+ +h.slice(3),limMin=()=>minutos(CFG.horario_limite);
+/* Regra de prazo: devolve o motivo do bloqueio ou '' se a data aceita reservas */
+function bloqueio(d){const a=agora();
+  if(d<a.d)return'Data passada';
+  const w=new Date(d+'T12:00').getDay();if(w==0||w==6)return'Fim de semana';
+  const b=DB.t('dias_bloqueados').find(x=>x.data==d);if(b)return b.descricao;
+  if(d==a.d&&a.m>=limMin())return`Prazo encerrado às ${CFG.horario_limite}`;
+  if(d>addDias(a.d,+CFG.dias_max))return'Fora do período';return''}
+const ativas=(d,h)=>DB.t('reservas').filter(r=>r.data==d&&r.horario==h&&r.status=='ativa');
+const soma=(l,k)=>l.reduce((s,r)=>s+r[k],0);
+
+/* ================= ESTADO E TELAS ================= */
+const novoF=()=>({cat:CATS[0],motivo:'',pessoas:'',veic:'',vm:false});
+const S={tab:null,mes:null,data:null,slot:null,aba:'suap',pd:null,f:novoF()};
+let U=null;const tent={n:0,ate:0};
+
+function tema(t){document.documentElement.dataset.theme=t;ls.set('ifh_tema',t)}
+function tg(b){tema(document.documentElement.dataset.theme=='dark'?'light':'dark');b.textContent=rotTema()}
+const rotTema=()=>document.documentElement.dataset.theme=='dark'?'☀ Modo claro':'☾ Modo escuro';
+
+function render(){
+  const head=`<header><div class="logo" aria-hidden="true"><i></i><i></i></div><div class="brand"><b>BusIF</b><small>Reserva de transporte · IF Goiano – Campus Hidrolândia</small></div>
+  ${U?`<div class="who"><b>${esc(U.nome)}</b><br>${PAPEL[U.papel]}</div>`:''}<button class="ghost" data-a="tg">${rotTema()}</button>${U?'<button class="ghost" data-a="sair">Sair</button>':''}</header>`;
+  if(!U){$('#app').innerHTML=head+vLogin();return}
+  const tabs=U.papel=='prefeitura'?['painel']:U.papel=='admin'?['painel','admin']:['nova','minhas'];
+  if(!tabs.includes(S.tab))S.tab=tabs[0];
+  const L={nova:'Nova reserva',minhas:'Minhas reservas',painel:'Painel do dia',admin:'Administração'};
+  $('#app').innerHTML=head+`<nav class="tabs">${tabs.map(t=>`<button class="${t==S.tab?'on':''}" data-a="tab" data-v="${t}">${L[t]}</button>`).join('')}</nav><main>${{nova:vNova,minhas:vMinhas,painel:vPainel,admin:vAdmin}[S.tab]()}</main>`;
+}
+
+function vLogin(){return`<div class="login card"><h1>Entrar</h1>
+<div class="seg"><button class="${S.aba=='suap'?'on':''}" data-a="aba" data-v="suap">SUAP</button><button class="${S.aba=='cpf'?'on':''}" data-a="aba" data-v="cpf">CPF e senha</button></div>
+${S.aba=='suap'?(SUAP.clientId?`<div class="note">Você será levado à página do SUAP para entrar. O BusIF nunca vê a sua senha do SUAP.</div><p><button class="btn" style="width:100%" data-a="suapLogin">Entrar com o SUAP</button></p>`:`<form data-s="loginSuap">
+<div class="note red">Modo demonstração: simula o retorno do SUAP. Para ativar o login real (OAuth2), preencha SUAP.clientId no código.</div>
+<label>Matrícula<input name="mat" inputmode="numeric" required></label><label>Nome<input name="nome" maxlength="120" required></label>
+<label>Vínculo<select name="papel"><option value="aluno">Aluno</option><option value="professor">Professor</option></select></label>
+<p><button class="btn" style="width:100%">Entrar com o SUAP</button></p></form>`)
+:`<form data-s="loginCpf"><label>CPF<input name="cpf" inputmode="numeric" placeholder="000.000.000-00" data-i="mascara" required></label>
+<label>Senha<input name="senha" type="password" autocomplete="current-password" required></label>
+<p><button class="btn" style="width:100%">Entrar</button></p>
+${DEMO?`<details><summary class="mu">Contas de demonstração</summary><small>Administrador: 111.444.777-35 / admin123<br>Prefeitura: 529.982.247-25 / prefeitura123<br>Inspetor: 123.456.789-09 / inspetor123</small></details>`:''}</form>`}</div>`}
+
+function cal(){const[y,m]=S.mes.split('-').map(Number),pri=new Date(y,m-1,1).getDay(),n=new Date(y,m,0).getDate();
+  let h=`<div class="calh"><button class="ic" data-a="mes" data-v="-1" aria-label="Mês anterior">‹</button><b>${MESES[m-1]} ${y}</b><button class="ic" data-a="mes" data-v="1" aria-label="Próximo mês">›</button></div><div class="cal">${'DSTQQSS'.split('').map(x=>`<i>${x}</i>`).join('')}`;
+  for(let i=0;i<pri;i++)h+='<span></span>';
+  for(let d=1;d<=n;d++){const k=`${S.mes}-${pad(d)}`,r=bloqueio(k);h+=`<button class="day${k==S.data?' sel':''}" ${r?`disabled title="${esc(r)}"`:''} data-a="pickData" data-v="${k}">${d}</button>`}
+  return h+'</div>'}
+function mes(n){const[y,m]=S.mes.split('-').map(Number),x=new Date(y,m-1+n,1);S.mes=`${x.getFullYear()}-${pad(x.getMonth()+1)}`;render()}
+function pickData(d){S.data=d;S.slot=null;render()}
+
+function vNova(){const a=agora(),f=S.f;S.mes=S.mes||a.d.slice(0,7);
+  const sl=S.data?`<div class="slots">${CFG.horarios.map(h=>{const l=ativas(S.data,h);return`<button class="slot${h==S.slot?' sel':''}" data-a="slot" data-v="${h}"><b>${h}</b><small>${l.length?`${l.length} reserva(s) · ${soma(l,'qtd_pessoas')} pessoas`:'Sem reservas'}</small></button>`}).join('')}</div>`:'<p class="mu">Escolha uma data para ver os horários.</p>';
+  const ja=S.slot?ativas(S.data,S.slot):[];
+  return`<div class="grid"><section class="card"><h2>1. Data</h2>${cal()}<p class="mu"><small>Reservas até as ${CFG.horario_limite} do próprio dia. Fins de semana, feriados e dias sem aula ficam desabilitados.</small></p></section>
+<section class="card"><h2>2. Horário de saída</h2>${sl}
+${S.slot?(ja.length?`<div class="note"><b>Já há reservas neste horário:</b><br>${ja.map(r=>`${r.qtd_pessoas} pessoas · ${esc(r.categoria)}`).join('<br>')}<br><small>Confira se o seu grupo já não está incluído.</small></div>`:'<div class="note">Nenhuma reserva neste horário até agora.</div>'):''}</section></div>
+<section class="card" style="margin-top:1rem"><h2>3. Detalhes da reserva</h2><div class="row">
+<div><label for="cat">Categoria do motivo</label><select id="cat" data-c="cat">${CATS.map(c=>`<option ${c==f.cat?'selected':''}>${c}</option>`).join('')}</select></div>
+<div><label for="pes">Pessoas (estimativa)</label><input id="pes" type="number" min="1" max="${CFG.max_pessoas}" value="${esc(f.pessoas)}" data-i="pes"></div>
+<div><label for="veic">Veículos sugeridos</label><input id="veic" type="number" min="1" max="20" value="${esc(f.veic)}" data-i="veic"></div></div>
+<small class="mu">Sugestão calculada com ${CFG.capacidade_veiculo} lugares por veículo. A prefeitura decide quantos enviará.</small>
+<label for="mot">Motivo detalhado</label><textarea id="mot" maxlength="300" data-i="mot" placeholder="Explique para que o transporte é necessário (mínimo 10 caracteres)">${esc(f.motivo)}</textarea><div class="cnt" id="cn">${f.motivo.length}/300</div>
+<p><button class="btn" data-a="reservar">Confirmar reserva</button></p></section>`}
+function onPes(v){S.f.pessoas=v;if(!S.f.vm){S.f.veic=+v>0?Math.ceil(+v/CFG.capacidade_veiculo):'';$('#veic').value=S.f.veic}}
+
+function reservar(){const f=S.f,p=+f.pessoas,v=+f.veic,m=f.motivo.trim();
+  if(!['aluno','professor','inspetor'].includes(U.papel))return;
+  if(!S.data||bloqueio(S.data))return toast(`Escolha uma data válida (reservas até as ${CFG.horario_limite}).`,1);
+  if(!S.slot||!CFG.horarios.includes(S.slot))return toast('Escolha um horário.',1);
+  if(!Number.isInteger(p)||p<1||p>+CFG.max_pessoas)return toast(`Informe de 1 a ${CFG.max_pessoas} pessoas.`,1);
+  if(!Number.isInteger(v)||v<1||v>20)return toast('Informe de 1 a 20 veículos.',1);
+  if(m.length<10)return toast('Descreva o motivo com pelo menos 10 caracteres.',1);
+  const ja=ativas(S.data,S.slot);
+  if(ja.length&&!confirm(`Já há ${ja.length} reserva(s) às ${S.slot} (${soma(ja,'qtd_pessoas')} pessoas). Deseja reservar mesmo assim?`))return;
+  DB.insert('reservas',{usuario_id:U.id,data:S.data,horario:S.slot,categoria:f.cat,motivo:m.slice(0,300),qtd_pessoas:p,veiculos_sugeridos:v,veiculos_enviados:null,status:'ativa',criada_em:new Date().toISOString(),cancelada_em:null,cancelada_apos_prazo:false});
+  S.f=novoF();S.slot=null;S.tab='minhas';render();toast('Reserva confirmada!')}
+
+function vMinhas(){const l=DB.t('reservas').filter(r=>r.usuario_id==U.id).sort((a,b)=>(b.data+b.horario).localeCompare(a.data+a.horario));
+  if(!l.length)return`<div class="card"><h2>Minhas reservas</h2><p class="mu">Você ainda não fez reservas.</p><button class="btn" data-a="tab" data-v="nova">Fazer uma reserva</button></div>`;
+  const a=agora();
+  return`<div class="card"><h2>Minhas reservas</h2><ul class="lst">${l.map(r=>{const ok=r.status=='ativa'&&(r.data>a.d||(r.data==a.d&&a.m<minutos(r.horario)));
+  return`<li><div><b>${br(r.data)} às ${r.horario}</b> <span class="badge ${r.status=='ativa'?'':'x'}">${r.status=='ativa'?'Ativa':'Cancelada'}</span><br><small>${r.qtd_pessoas} pessoas · ${r.veiculos_sugeridos} veículo(s) sugerido(s)${r.veiculos_enviados!=null?` · <b>Prefeitura enviará ${r.veiculos_enviados}</b>`:''}<br>${esc(r.categoria)}: ${esc(r.motivo)}</small></div>${ok?`<button class="ghost" data-a="cancelar" data-v="${r.id}">Cancelar</button>`:''}</li>`}).join('')}</ul></div>`}
+function cancelar(id){const r=DB.t('reservas').find(x=>x.id==id),a=agora();
+  if(!r||r.usuario_id!=U.id||r.status!='ativa')return;
+  if(r.data<a.d||(r.data==a.d&&a.m>=minutos(r.horario)))return toast('Este horário já passou.',1);
+  if(!confirm('Cancelar esta reserva?'))return;
+  const ap=r.data==a.d&&a.m>=limMin();
+  DB.update('reservas',id,{status:'cancelada',cancelada_em:new Date().toISOString(),cancelada_apos_prazo:ap});render();
+  toast(ap?'Reserva cancelada. A prefeitura verá o aviso no painel.':'Reserva cancelada.')}
+
+function vPainel(){const d=S.pd||agora().d,us=DB.t('usuarios'),rs=DB.t('reservas').filter(r=>r.data==d),at=rs.filter(r=>r.status=='ativa'),ed=U.papel=='prefeitura'||U.papel=='admin';
+  const blocos=CFG.horarios.map(h=>{const l=rs.filter(r=>r.horario==h);if(!l.length)return'';const A=l.filter(r=>r.status=='ativa');
+  return`<div class="hd"><span>${h}</span><span>${soma(A,'qtd_pessoas')} pessoas · ${soma(A,'veiculos_sugeridos')} veíc. sugeridos</span></div><ul class="lst">${l.map(r=>{const u=us.find(x=>x.id==r.usuario_id)||{nome:'?',papel:'aluno'};
+  return`<li class="${r.status!='ativa'?'cancel':''}"><div><b>${esc(u.nome)}</b> <small>(${PAPEL[u.papel]})</small>${r.status!='ativa'?` <span class="badge x">Cancelada${r.cancelada_apos_prazo?' após o prazo':''}</span>`:''}<br><small>${r.qtd_pessoas} pessoas · ${r.veiculos_sugeridos} veíc. sugerido(s)<br>${esc(r.categoria)}: ${esc(r.motivo)}</small></div>
+  ${ed&&r.status=='ativa'?`<div class="env no-print"><label for="e${r.id}" style="margin:0">Enviar</label><input id="e${r.id}" type="number" min="0" max="50" value="${r.veiculos_enviados??''}"><button class="btn" data-a="salvaEnv" data-v="${r.id}">Salvar</button></div>`:(r.veiculos_enviados!=null?`<b>Enviar: ${r.veiculos_enviados}</b>`:'')}</li>`}).join('')}</ul>`}).join('');
+  return`<div class="card"><div class="row no-print"><div><label for="pd">Data</label><input id="pd" type="date" value="${d}" data-c="pd"></div><button class="ghost" data-a="print">Imprimir / PDF</button></div>
+  <h2 style="margin-top:1rem">Transporte de ${br(d)}</h2>
+  <div class="sum"><div><b>${at.length}</b>reservas</div><div><b>${soma(at,'qtd_pessoas')}</b>pessoas</div><div><b>${soma(at,'veiculos_sugeridos')}</b>veículos sugeridos</div></div>
+  ${blocos||'<p class="mu">Nenhuma reserva nesta data.</p>'}<p class="mu no-print"><small>Atualiza sozinho a cada 30 segundos.</small></p></div>`}
+function salvaEnv(id){const v=$('#e'+id).value;if(v!==''&&(!Number.isInteger(+v)||+v<0||+v>50))return toast('Valor inválido.',1);DB.update('reservas',id,{veiculos_enviados:v===''?null:+v});render();toast('Salvo.')}
+
+function vAdmin(){const bl=DB.t('dias_bloqueados').sort((a,b)=>a.data<b.data?-1:1),us=DB.t('usuarios').filter(u=>u.cpf);
+  return`<div class="grid"><section class="card"><h2>Dias bloqueados</h2><form class="row" data-s="addBl"><input type="date" name="d" aria-label="Data" required><input name="s" placeholder="Feriado, recesso…" maxlength="100" aria-label="Descrição" required><button class="btn">Adicionar</button></form>
+  <ul class="lst">${bl.map(b=>`<li><span>${br(b.data)} · ${esc(b.descricao)}</span><button class="ghost" data-a="rmBl" data-v="${b.data}">Remover</button></li>`).join('')}</ul></section>
+  <section class="card"><h2>Usuários com CPF</h2><form data-s="addUs"><div class="row"><input name="n" placeholder="Nome" maxlength="120" aria-label="Nome" required><input name="c" placeholder="CPF" inputmode="numeric" data-i="mascara" aria-label="CPF" required></div>
+  <div class="row" style="margin-top:.5rem"><input name="p" type="password" placeholder="Senha (mín. 6)" minlength="6" aria-label="Senha" required><select name="r" aria-label="Papel"><option value="inspetor">Inspetor</option><option value="prefeitura">Prefeitura</option><option value="admin">Administrador</option></select><button class="btn">Cadastrar</button></div></form>
+  <ul class="lst">${us.map(u=>`<li><span>${esc(u.nome)} <small>${PAPEL[u.papel]} · ${mask(u.cpf)}</small></span></li>`).join('')}</ul></section></div>`}
+function addBl(e){e.preventDefault();const f=e.target,l=DB.t('dias_bloqueados');if(l.some(x=>x.data==f.elements.d.value))return toast('Data já bloqueada.',1);l.push({data:f.elements.d.value,descricao:f.elements.s.value.trim()});DB.save('dias_bloqueados',l);render()}
+function rmBl(d){DB.save('dias_bloqueados',DB.t('dias_bloqueados').filter(x=>x.data!=d));render()}
+async function addUs(e){e.preventDefault();const f=e.target,c=f.elements.c.value.replace(/\D/g,'');
+  if(!cpfOk(c))return toast('CPF inválido.',1);if(DB.t('usuarios').some(u=>u.cpf==c))return toast('CPF já cadastrado.',1);
+  DB.insert('usuarios',{nome:f.elements.n.value.trim(),papel:f.elements.r.value,matricula:null,cpf:c,senha_hash:await hash(f.elements.p.value),criado_em:new Date().toISOString()});render();toast('Usuário cadastrado.')}
+
+/* ================= LOGIN ================= */
+function entrar(u){U=u;ls.set('ifh_sess',u.id);S.tab=null;render()}
+function sair(){U=null;ls.set('ifh_sess','');render()}
+function loginSuap(e){e.preventDefault();const f=e.target,m=f.elements.mat.value.trim();
+  if(!/^\d{6,14}$/.test(m))return toast('Matrícula inválida.',1);
+  let u=DB.t('usuarios').find(x=>x.matricula==m);
+  if(!u)u=DB.insert('usuarios',{nome:f.elements.nome.value.trim().slice(0,120),papel:f.elements.papel.value,matricula:m,cpf:null,senha_hash:null,criado_em:new Date().toISOString()});
+  entrar(u)}
+async function loginCpf(e){e.preventDefault();const f=e.target,c=f.elements.cpf.value.replace(/\D/g,''),t=Date.now();
+  if(tent.ate>t)return toast('Muitas tentativas. Aguarde 1 minuto.',1);
+  const u=DB.t('usuarios').find(x=>x.cpf==c);
+  if(!cpfOk(c)||!u||u.senha_hash!=await hash(f.elements.senha.value)){if(++tent.n>=5){tent.n=0;tent.ate=t+60000}return toast('CPF ou senha inválidos.',1)}
+  tent.n=0;entrar(u)}
+
+/* ================= SUAP: OAuth2 (Authorization Code + PKCE) ================= */
+const b64=a=>btoa(String.fromCharCode(...new Uint8Array(a))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+const rnd=n=>b64(crypto.getRandomValues(new Uint8Array(n)));
+const ss={get(k){try{return sessionStorage.getItem(k)}catch(e){return mem['s'+k]??null}},set(k,v){try{sessionStorage.setItem(k,v)}catch(e){mem['s'+k]=v}},del(k){try{sessionStorage.removeItem(k)}catch(e){delete mem['s'+k]}}};
+async function loginSuapOAuth(){
+  if(!/^https?:$/.test(location.protocol)||!(window.crypto&&crypto.subtle))return toast('O login pelo SUAP exige https:// (ou http://localhost). Hospede o arquivo.',1);
+  const v=rnd(48),st=rnd(16),ch=b64(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(v)));
+  ss.set('ifh_pkce',v);ss.set('ifh_state',st);
+  location.href=SUAP.url+'/o/authorize/?'+new URLSearchParams({response_type:'code',client_id:SUAP.clientId,redirect_uri:SUAP.redirect,scope:SUAP.scope,state:st,code_challenge:ch,code_challenge_method:'S256'})}
+async function retornoSuap(){ /* roda ao carregar a página: trata o retorno do SUAP (?code=...&state=...) */
+  const q=new URLSearchParams(location.search);if(!SUAP.clientId||!(q.has('code')||q.has('error')))return;
+  const code=q.get('code'),v=ss.get('ifh_pkce'),ok=!!q.get('state')&&q.get('state')===ss.get('ifh_state');
+  history.replaceState(null,'',location.pathname);ss.del('ifh_pkce');ss.del('ifh_state');
+  if(q.has('error'))return toast('Login pelo SUAP cancelado ou negado.',1);
+  if(!ok||!v)return toast('Sessão de login inválida. Tente entrar de novo.',1);
+  try{
+    const tr=await fetch(SUAP.tokenUrl,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:new URLSearchParams({grant_type:'authorization_code',code,redirect_uri:SUAP.redirect,client_id:SUAP.clientId,code_verifier:v})});
+    if(!tr.ok)throw new Error('token '+tr.status);
+    const tk=await tr.json(),ur=await fetch(SUAP.apiUrl,{headers:{Authorization:'Bearer '+tk.access_token}});
+    if(!ur.ok)throw new Error('meus-dados '+ur.status);
+    const d=await ur.json(),mat=String(d.matricula||d.identificacao||d.username||'').replace(/\D/g,'');
+    if(!mat)throw new Error('resposta sem matrícula');
+    const papel=/aluno|estudante/i.test(d.tipo_vinculo||JSON.stringify(d.vinculo||''))?'aluno':'professor';
+    const nome=String(d.nome_usual||d.nome||(d.vinculo&&d.vinculo.nome)||mat).slice(0,120);
+    let u=DB.t('usuarios').find(x=>x.matricula==mat);
+    if(u){DB.update('usuarios',u.id,{nome});u.nome=nome}
+    else u=DB.insert('usuarios',{nome,papel,matricula:mat,cpf:null,senha_hash:null,criado_em:new Date().toISOString()});
+    entrar(u)
+  }catch(e){console.error('SUAP:',e);toast('Não foi possível concluir o login pelo SUAP. Veja o console (F12).',1)}}
+
+/* Eventos (delegação: nenhum atributo onclick/onsubmit no HTML) */
+const ACT={tg:(v,b)=>tg(b),sair,aba:v=>{S.aba=v;render()},tab:v=>{S.tab=v;render()},mes:v=>mes(+v),pickData,slot:v=>{S.slot=v;render()},reservar:()=>reservar(),cancelar:v=>cancelar(+v),salvaEnv:v=>salvaEnv(+v),print:()=>window.print(),rmBl,suapLogin:()=>loginSuapOAuth()};
+const SUB={addBl,addUs,loginSuap,loginCpf};
+document.addEventListener('click',e=>{const b=e.target.closest('[data-a]'),f=b&&ACT[b.dataset.a];if(f)f(b.dataset.v,b)});
+document.addEventListener('submit',e=>{const f=SUB[e.target.dataset.s];if(f)f(e)});
+document.addEventListener('input',e=>{const t=e.target,k=t.dataset.i;
+  if(k=='mascara')mascara(t);else if(k=='pes')onPes(t.value);
+  else if(k=='veic'){S.f.veic=t.value;S.f.vm=true}
+  else if(k=='mot'){S.f.motivo=t.value;$('#cn').textContent=t.value.length+'/300'}});
+document.addEventListener('change',e=>{const t=e.target,k=t.dataset.c;if(k=='cat')S.f.cat=t.value;else if(k=='pd'){S.pd=t.value;render()}});
+
+/* ================= INÍCIO ================= */
+tema(ls.get('ifh_tema')||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'));
+(async()=>{await seed();const id=+ls.get('ifh_sess');U=DB.t('usuarios').find(u=>u.id==id)||null;await retornoSuap();render();
+  setInterval(()=>{if(U&&S.tab=='painel'&&!document.activeElement.matches('input,textarea,select'))render()},30000);
+  addEventListener('storage',()=>{if(U&&!document.activeElement.matches('input,textarea,select'))render()});
+  console.info('Esquema SQL da versão com servidor:',SCHEMA_SQL)})();
+</script>
+</body>
+</html>
